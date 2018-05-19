@@ -55,6 +55,7 @@ function showMap(){
   attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
   }).addTo(map);
 
+  map.setView([0, 0], 1);
 }
 
 function clearMap() {
@@ -79,15 +80,14 @@ function get_random_colour() {
 }
 
 function plotMarkers(bounds, markArray){
-  showMap();
-  map.fitBounds(bounds);
+  map.fitBounds(bounds)
   clearMap();
 
   // loop over each marker and add to map
   marksLayerGroup = L.layerGroup();
 
   markArray.forEach(function(mark){
-    marksLayerGroup.addLayer(L.marker([mark[1],mark[2]]).bindPopup(mark[0])).addTo(map);
+    marker = new L.marker([mark[1],mark[2]]).bindPopup(mark[0]).addTo(map)
   });
 }
 
@@ -115,13 +115,9 @@ ws.onmessage = function (event) {
 
     // Enable submit button
     $('#submit').attr("disabled",false);
-    $('#map_placeholder').hide();
 
     // Map handling functionality
     if(edata.hasOwnProperty('markers')){
-      $('#map_placeholder').show();
-      $('#map_placeholder').html("").append('<div id="map"></div>');
-
       plotMarkers(bounds,markers);
     }
 
@@ -133,6 +129,7 @@ ws.onmessage = function (event) {
       if(name === 'init'){
         // stylise field val into field: val
         $('#processing').hide();
+        showMap();
       }
 
       // Output table data
