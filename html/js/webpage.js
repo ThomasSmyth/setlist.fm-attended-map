@@ -80,7 +80,7 @@ function get_random_colour() {
 }
 
 function plotMarkers(bounds, markArray){
-  map.fitBounds(bounds)
+  map.flyToBounds(bounds, {padding:[50,50]})
   clearMap();
 
   // loop over each marker and add to map
