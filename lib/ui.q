@@ -9,7 +9,7 @@
   markers:.data.markers data;                                                                   / get city markers
 
   output,:.ui.format[`table;(`time`rows`data)!(`int$(.z.p-start)%1000000;count data;data)];     / Send formatted table
-  output,:enlist[`markers]!enlist markers;
+  output,:markers;
   `:npo set output;
   :output;
  };

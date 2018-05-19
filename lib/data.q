@@ -12,6 +12,7 @@
   :res;
  };
 
-.data.markers:{[data]
-  :distinct select city,coord:(lat,'long) from data;
+.data.markers:{[data]                                                                           / requires city,lat,long columns
+  m:distinct data[;`city`lat`long];
+  :`markers`bounds!(m;(min;max)@\:m[;1 2]);
  };

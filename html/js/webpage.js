@@ -78,16 +78,17 @@ function get_random_colour() {
   return colour;
 }
 
-function plotMarkers(athlete, markArray){
+function plotMarkers(bounds, markArray){
+  showMap();
+  map.fitBounds(bounds);
+  clearMap();
+
   // loop over each marker and add to map
   marksLayerGroup = L.layerGroup();
 
   markArray.forEach(function(mark){
-    marksLayerGroup.addLayer(L.marker([mark[0],mark[1]]).bindPopup(mark[2])).addTo(map);
+    marksLayerGroup.addLayer(L.marker([mark[1],mark[2]]).bindPopup(mark[0])).addTo(map);
   });
-
-  layerControl.addOverlay(marksLayerGroup, athlete.concat(" markers"));
-
 }
 
 
@@ -117,15 +118,11 @@ ws.onmessage = function (event) {
     $('#map_placeholder').hide();
 
     // Map handling functionality
-    if(edata.hasOwnProperty('plottype')){
-
+    if(edata.hasOwnProperty('markers')){
       $('#map_placeholder').show();
       $('#map_placeholder').html("").append('<div id="map"></div>');
 
-      if(plottype === 'markers'){
-        plotMarkers(markers);
-      }
-
+      plotMarkers(bounds,markers);
     }
 
     // Data handling functionality
