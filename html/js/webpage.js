@@ -29,19 +29,6 @@ function jsonTable(data){
   table+= '</tbody></table>';
   return table;
 }
-// Returns array of checkbox values depending on if "All" option is checked
-function checkboxVals(selector){
-  var array = [], $parent = $(selector), $inputs = $parent.find('input');
-  // If all is not checked, grab the values that are checked, otherwise return empty array
-  // Includes the optimization, if all inputs are checked (except "All"), this is the same as if
-  // "All" was selected, therefore return empty array
-  if($parent.find('input[value="all"]:checked').length === 0){
-    if($parent.find('input[value!="all"]:checked').length < $inputs.length - 1){
-      $parent.find('input[value!="all"]:checked').each(function(a,b){array.push($(b).val());});
-    }
-  }
-  return array;
-}
 
 // Returns an object of all inputs used for the query
 function getInputs() {
@@ -49,11 +36,6 @@ function getInputs() {
       enddate       = $('#enddate input').val(),
       username      = $('#username input').val(),
       athlete_Id    = $('#athleteId').val()
-      clubvals      = [],
-      following     = [],
-      include_map   = [],
-      summary       = [],
-      include_clubs = [],
 
   // Add values from grouping,region & custtype filter to their respective array
   $('#summary .checklist input:checked').each(function(a,b){summary.push($(b).val());});
@@ -61,17 +43,12 @@ function getInputs() {
   $('#include_clubs .checklist input:checked').each(function(a,b){include_clubs.push($(b).val());});
   $('#include_map .checklist input:checked').each(function(a,b){include_map.push($(b).val());});
 
-  // Add checkbox values to appropriate array depending on whether "All" option is checked
-  clubvals = checkboxVals('#clubs-filter');
-  athletevals = checkboxVals('#athlete-filter');
-
   return {
     username: username,
   }
 }
 
 function showMap(){
-
   window.map = L.map('map');
 
   L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
