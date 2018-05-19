@@ -25,6 +25,7 @@
     c:count p 0;                                                                                / get current number of events
     .log.o("Requesting event page {} for {}";(p 1;id));
     res:.http.req[.utl.sub("user/{}/attended";id);enlist[`p]!enlist p 1];                       / request attended events
+    if[404f=res`code;.log.e("User not found: {}";id)];
     p[0],:raze .fmt.attended'[res`setlist];                                                     / format json into table
     p[2]:(count[p 0]>="j"$res`total)or c=count p 0;                                             / determine if all results have been retrieved or requests have been exhausted
     :@[p;1;+;not p 2];                                                                          / increment page number if more data needs retrieved

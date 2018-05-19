@@ -5,4 +5,5 @@
 \l lib/log.q
 \l lib/http.q
 \l lib/data.q
+\l lib/html.q
 \l lib/ui.q

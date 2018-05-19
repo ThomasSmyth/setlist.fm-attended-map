@@ -103,7 +103,7 @@ ws.onclose = function () {
   // Disable submit button
   $(this).attr("disabled",true);
   // Disable export button
-  $('#export').addClass("disabled");
+//  $('#export').addClass("disabled");
 };
 ws.onmessage = function (event) {
   if(event.data){
@@ -133,8 +133,6 @@ ws.onmessage = function (event) {
       if(name === 'init'){
         // stylise field val into field: val
         $('#processing').hide();
-        $('#summary').show();
-        $('#include_map').show();
       }
 
       // Output table data
@@ -146,10 +144,10 @@ ws.onmessage = function (event) {
         $('#tableoutput').html(jsonTable(data.data));
 
         // Enable export link
-        $('#export').removeClass("disabled");
+//        $('#export').removeClass("disabled");
 
         // Resize table cells
-        //$('#tableoutput tbody td, #tableoutput thead th').width($('#tableoutput').width()/$('#tableoutput thead th').length-10);
+        $('#tableoutput tbody td, #tableoutput thead th').width($('#tableoutput').width()/$('#tableoutput thead th').length-10);
       }
 
     } else {
@@ -179,7 +177,7 @@ $(function() {
     $(this).attr("disabled",true);
     $('#processing').show();
     // Disable export on submit
-    $('#export').addClass("disabled");
+//    $('#export').addClass("disabled");
     // Send to kdb+ over websockets
     ws.send(serialize(JSON.stringify(getInputs())));
   });

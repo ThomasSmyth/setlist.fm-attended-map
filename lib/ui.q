@@ -6,6 +6,8 @@
   start:.z.p;                                                                                   / set start time
 
   data:.data.attended dict`username;                                                            / get attended events
+//  `export set data;
+  data:delete url from update artist:.html.anchor'[url;artist]from data;                        / link to event
   markers:.data.markers data;                                                                   / get city markers
 
   output,:.ui.format[`table;(`time`rows`data)!(`int$(.z.p-start)%1000000;count data;data)];     / Send formatted table
@@ -19,13 +21,12 @@
   };
 
 .ui.execdict:{[dict]                                                                            / [params] execute request based on passed dict of parameters
-  // move init to .z.o
   if[not`username in key dict;
     .log.e("Username not passed");
    ];
 
   .log.o"Executing query";                                                                      / execute query using parsed params
-  data:@[.ui.exectimeit;dict;{.log.e("Didn't execute due to {}";dict)}];
+  data:@[.ui.exectimeit;dict;{.log.e("Didn't execute due to {}";x)}];
 
   .log.o("Returning {} results";count data[`data;`data]);
   :data;
