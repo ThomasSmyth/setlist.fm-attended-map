@@ -66,15 +66,7 @@ function getInputs() {
   athletevals = checkboxVals('#athlete-filter');
 
   return {
-    after: startdate,
-    before: enddate,
     username: username,
-    club_id: clubvals,
-    athlete_id: athletevals,
-    summary: summary,
-    following: following,
-    include_clubs: include_clubs,
-    include_map: include_map,
   }
 }
 
@@ -178,13 +170,6 @@ ws.onmessage = function (event) {
         $('#processing').hide();
         $('#tableoutput').show();
         $('#tableoutput').html(jsonTable(data.data));
-        $('#tblstats').html("").append('<li>Date Range: ' + getInputs().startdate + " to " + getInputs().enddate +'</li>' +
-          '<li>Generated in: ' + (data.time/1000).toFixed(1) + "s" +'</li>' +
-          '<li>Rows: ' + data.rows +'</li>');
-
-        // Show stats bar
-        $('.stats').show();
-//        $('#segName').hide();
 
         // Enable export link
         $('#export').removeClass("disabled");
@@ -214,33 +199,6 @@ ws.error = function (error) {
 
 // jQuery used for UI
 $(function() {
-
-  // Add calendar for start,end date
-  $('#startdate').datepicker();
-  $('#enddate').datepicker();
-
-  // Filter options
-  // This is a UI design pattern for when there is a list of multiple options for when at least
-  // one option is required.
-  // The "All" option is checked by default, when another option is selected the "All" option
-  // is unchecked.
-  // If the "All" option is checked, then all other options will be unchecked
-  $('.multi-select-checkbox').each( function () {
-    $(this).find('input[value!="all"]').click( function () {
-      var $parent = $(this).closest('.multi-select-checkbox');
-      if($parent.find('input[value!="all"]:checked').length){
-        $parent.find('input[value="all"]').prop('checked', false);
-      } else {
-        $parent.find('input[value="all"]').prop('checked', true)
-      }
-    })
-  });
-  $('.multi-select-checkbox').each( function () {
-    $(this).find('input[value="all"]').click( function () {
-      $(this).closest('.multi-select-checkbox').find('input[value!="all"]').prop('checked', false);
-    });
-  });
-
   // When submit button is clicked, disabled buttons and send data over WebSocket
   $('#submit').click(function(){
     // Disable submit button on submit
