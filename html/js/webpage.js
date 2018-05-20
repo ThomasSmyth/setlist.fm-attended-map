@@ -56,7 +56,7 @@ function showMap(){
   window.map = L.map('map');
 
   L.tileLayer('https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_all/{z}/{x}/{y}.png', {
-    attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="http://cartodb.com/attributions">CartoDB</a>',
+    attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OSM</a> &copy; <a href="http://cartodb.com/attributions">CartoDB</a>',
     subdomains: 'abcd',
     maxZoom: 19
   }).addTo(map);
@@ -85,7 +85,14 @@ function plotMarkers(bounds, markArray){
 
   // loop over each marker and add to layer group
   markArray.forEach(function(mark){
-    marksLayerGroup.addLayer(L.marker([mark[1],mark[2]]).bindPopup(mark[0]))
+    marker = L.marker([mark[1],mark[2]]).bindPopup(mark[0]);
+    marker.on('mouseover', function (e) {
+      this.openPopup();
+    });
+    marker.on('mouseout', function (e) {
+      this.closePopup();
+    });
+    marksLayerGroup.addLayer(marker)
   });
 
   // add layer group to map
