@@ -81,10 +81,6 @@ function get_random_colour() {
 }
 
 function onClick(e) {
-  z = map.getZoom();
-  if (z < 11) {
-    z = 11;
-  }
   map.setView(e.latlng, z);
  }
 

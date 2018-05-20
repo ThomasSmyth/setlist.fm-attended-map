@@ -12,6 +12,7 @@
 
   output,:.ui.format[`table;(`time`rows`data)!(`int$(.z.p-start)%1000000;count data;data)];     / Send formatted table
   output,:markers;
+  output[`username]:dict`username;
   `:npo set output;
   :output;
  };

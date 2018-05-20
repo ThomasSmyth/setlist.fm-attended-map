@@ -3,7 +3,7 @@
 .http.key:@[{first read0 x};`:cfg/setlistfm.key;{-1 x;exit 0}];
 
 .http.root.setlistfm:"https://api.setlist.fm/rest/1.0/";
-.http.cmd.setlistfm:{.utl.sub("curl -sX GET --header 'Accept: application/json' --header 'x-api-key: {}' {}";.http.key;x)};
+.http.cmd.setlistfm:{.utl.sub("curl -sX GET --header 'Accept: application/json' --header 'x-api-key: {}' {}";(.http.key;x))};
 
 .http.req.setlistfm:{[url;params]
   :.j.k raze system .http.cmd.setlistfm .http.root.setlistfm,url,"?",.http.urlencode params;
@@ -34,7 +34,7 @@
     c:count p 0;                                                                                / get current number of events
     .log.o("Requesting event page {} for {}";(p 1;id));
     res:.http.req.setlistfm[.utl.sub("user/{}/attended";id);enlist[`p]!enlist p 1];             / request attended events
-    if[404f=res`code;.log.e("User not found: {}";id)];
+    if[404f=first res`code;.log.e("User not found: {}";id)];
     p[0],:raze .fmt.attended'[res`setlist];                                                     / format json into table
     p[2]:(count[p 0]>="j"$res`total)or c=count p 0;                                             / determine if all results have been retrieved or requests have been exhausted
     :@[p;1;+;not p 2];                                                                          / increment page number if more data needs retrieved
