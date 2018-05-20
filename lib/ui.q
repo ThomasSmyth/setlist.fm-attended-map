@@ -8,7 +8,7 @@
   data:.data.attended dict;                                                                     / get attended events and cache results for a connection handle
 //  `export set data;
   data:delete url from update artist:.html.anchor'[url;artist]from data;                        / link to event
-  markers:.data.markers data;                                                                   / get city markers
+  markers:.data.markers[dict;data];                                                             / get city markers
 
   output,:.ui.format[`table;(`time`rows`data)!(`int$(.z.p-start)%1000000;count data;data)];     / Send formatted table
   output,:markers;
@@ -53,4 +53,5 @@
 .z.wc:{
   .log.o"websocket closed deleting cached data";
   delete from`.cache.attended where not h in key .z.W;
+  delete from`.cache.geocode where not h in key .z.W;
  };
