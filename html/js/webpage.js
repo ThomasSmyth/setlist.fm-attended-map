@@ -64,6 +64,12 @@ function showMap(){
   map.setView([0,0], 1);
 }
 
+function clearMap(){
+  // clear current markers
+  map.removeLayer(marksLayerGroup);
+  marksLayerGroup = L.layerGroup();
+}
+
 function get_random_colour() {
   var letters = '0123456789ABCDEF'.split('');
   var colour = '#';
@@ -94,9 +100,7 @@ var customIconRed = L.icon({
 
 function plotMarkers(bounds, markArray){
 
-  // clear current markers
-  map.removeLayer(marksLayerGroup);
-  marksLayerGroup = L.layerGroup();
+  clearMap();
 
   // set new bounds
   map.flyToBounds(bounds,{padding:[50,50]})
@@ -133,6 +137,7 @@ ws.onclose = function () {
   // Disable export button
 //  $('#export').addClass("disabled");
 };
+
 ws.onmessage = function (event) {
   if(event.data){
     var edata = JSON.parse(deserialize(event.data)),
@@ -205,6 +210,8 @@ $(function() {
     // Disable submit button on submit
     $(this).attr("disabled",true);
     $('#processing').show();
+    // clear markers from map
+    clearMap();
     // Disable export on submit
 //    $('#export').addClass("disabled");
     // Send to kdb+ over websockets
