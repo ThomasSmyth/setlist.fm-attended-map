@@ -55,8 +55,10 @@ var marksLayerGroup = L.layerGroup();
 function showMap(){
   window.map = L.map('map');
 
-  L.tileLayer('http://{s}.tiles.wmflabs.org/bw-mapnik/{z}/{x}/{y}.png', {
-    attribution:'&copy; <a href="http://osm.org/copyright">OSM</a>'
+  L.tileLayer('https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_all/{z}/{x}/{y}.png', {
+    attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="http://cartodb.com/attributions">CartoDB</a>',
+    subdomains: 'abcd',
+    maxZoom: 19
   }).addTo(map);
 
   map.setView([0,0], 1);
