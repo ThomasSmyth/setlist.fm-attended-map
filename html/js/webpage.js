@@ -74,6 +74,24 @@ function get_random_colour() {
   return colour;
 }
 
+function onClick(e) {
+  z = map.getZoom();
+  if (z < 11) {
+    z = 11;
+  }
+  map.setView(e.latlng, z);
+ }
+
+var customIconBlue = L.icon({
+  iconUrl:'img/marker-15-blue.svg',
+  iconSize: [30,30]
+});
+
+var customIconRed = L.icon({
+  iconUrl:'img/marker-15-red.svg',
+  iconSize: [30,30]
+});
+
 function plotMarkers(bounds, markArray){
 
   // clear current markers
@@ -85,7 +103,9 @@ function plotMarkers(bounds, markArray){
 
   // loop over each marker and add to layer group
   markArray.forEach(function(mark){
-    marker = L.marker([mark[1],mark[2]]).bindPopup(mark[0]);
+    marker = L.marker([mark[1],mark[2]],{icon:customIconBlue}).bindPopup(mark[0]);
+    marker.myCustomId = mark[0];
+    marker.on('click', onClick);
     marker.on('mouseover', function (e) {
       this.openPopup();
     });
@@ -174,6 +194,10 @@ ws.error = function (error) {
   $('#error-modal').modal();
 }
 
+ws.ser = function (input) {
+  return serialize(JSON.stringify(input));
+}
+
 // jQuery used for UI
 $(function() {
   // When submit button is clicked, disabled buttons and send data over WebSocket
@@ -184,6 +208,6 @@ $(function() {
     // Disable export on submit
 //    $('#export').addClass("disabled");
     // Send to kdb+ over websockets
-    ws.send(serialize(JSON.stringify(getInputs())));
+    ws.send(ws.ser(getInputs()));
   });
 });
