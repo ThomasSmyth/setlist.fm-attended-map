@@ -48,25 +48,18 @@ function getInputs() {
   }
 }
 
+// create layer group for markers
+var marksLayerGroup = L.layerGroup();
+
+// Display map div
 function showMap(){
   window.map = L.map('map');
 
-  L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
-  attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+  L.tileLayer('http://{s}.tiles.wmflabs.org/bw-mapnik/{z}/{x}/{y}.png', {
+    attribution:'&copy; <a href="http://osm.org/copyright">OSM</a>'
   }).addTo(map);
 
-  map.setView([0, 0], 1);
-}
-
-function clearMap() {
-  map.eachLayer(function (layer) {
-      map.removeLayer(layer);
-  });
-
-  L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
-  attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-  }).addTo(map);
-
+  map.setView([0,0], 1);
 }
 
 function get_random_colour() {
@@ -80,15 +73,21 @@ function get_random_colour() {
 }
 
 function plotMarkers(bounds, markArray){
-  map.flyToBounds(bounds, {padding:[50,50]})
-  clearMap();
 
-  // loop over each marker and add to map
+  // clear current markers
+  map.removeLayer(marksLayerGroup);
   marksLayerGroup = L.layerGroup();
 
+  // set new bounds
+  map.flyToBounds(bounds,{padding:[50,50]})
+
+  // loop over each marker and add to layer group
   markArray.forEach(function(mark){
-    marker = new L.marker([mark[1],mark[2]]).bindPopup(mark[0]).addTo(map)
+    marksLayerGroup.addLayer(L.marker([mark[1],mark[2]]).bindPopup(mark[0]))
   });
+
+  // add layer group to map
+  marksLayerGroup.addTo(map);
 }
 
 
