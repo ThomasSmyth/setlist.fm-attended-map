@@ -1,18 +1,20 @@
 / data processing
 
-.cache.attended:()!();
+.cache.attended:([h:();username:()]data:());
 
-.data.attended:{[id]                                                                            / [id] get attended events for a user, checking for cached events;
-  if[first enlist[id]in key .cache.attended;
-    .log.o("Returning cached results for {}";id);
-    :.cache.attended id;
+.data.attended:{[dict]                                                                          / [params] get attended events for a user, checking for cached events;
+  if[(k:dict`h`username)in key .cache.attended;                                                 / check if results are cached
+    .log.o("Returning cached results for {}";dict`username);
+    :.cache.attended[k]`data;                                                                   / return data from cache
   ];
-  .log.o("No cached results for {}";id);
-  .cache.attended,:enlist[id]!enlist res:.http.attended id;
+  .log.o("No cached results for {}";dict`username);
+  res:.http.attended dict`username;                                                             / get results via http request to setlist.fm
+  `.cache.attended upsert dict[`h`username],enlist res;
   :res;
  };
 
 .data.geocode:{[params]
+  .log.o("Geocoding: {}";params`q);
   res:.http.req.nominatim params;
   if[0h=type res;:`lat`long!0n 0n];
   :`lat`long!raze"F"$res`lat`lon;

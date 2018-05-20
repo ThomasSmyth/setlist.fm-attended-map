@@ -48,13 +48,14 @@ function getInputs() {
   }
 }
 
+// Create map
+var map=L.map('map');
+
 // create layer group for markers
 var marksLayerGroup = L.layerGroup();
 
 // Display map div
 function showMap(){
-  window.map = L.map('map');
-
   L.tileLayer('https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_all/{z}/{x}/{y}.png', {
     attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OSM</a> &copy; <a href="http://cartodb.com/attributions">CartoDB</a>',
     subdomains: 'abcd',

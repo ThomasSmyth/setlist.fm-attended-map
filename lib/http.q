@@ -43,10 +43,10 @@
 
 .fmt.attended:{
   artist:`date xcol enlist`eventDate`artist`url#@[x;`artist;@[;`name]];                         / get artist info
-  venue:`venue xcol enlist((),`name)#x`venue;                                                   / get venue name
-  city:`city xcol enlist`name`state`stateCode#x[`venue;`city];                                  / get city info
+  venue:`venue xcol enlist enlist[`name]#x`venue;                                               / get venue name
+  city:`city xcol enlist`name`state#x[`venue;`city];                                            / get city info
   coords:enlist x[`venue;`city;`coords];                                                        / get city coords
-  country:`code`country xcol enlist x[`venue;`city;`country];                                   / get country info
+  country:`country xcol enlist`code _ x[`venue;`city;`country];                                 / get country
   r:(,'/)(artist;venue;city;coords;country);                                                    / join sub tables
-  :{@[x;y;z$]}/[r;`date`stateCode`code;"DSS"];                                                  / convert types
+  :@[r;`date;"D"$];
  };

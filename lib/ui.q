@@ -5,7 +5,7 @@
   output:()!();                                                                                 / blank output
   start:.z.p;                                                                                   / set start time
 
-  data:.data.attended dict`username;                                                            / get attended events
+  data:.data.attended dict;                                                                     / get attended events and cache results for a connection handle
 //  `export set data;
   data:delete url from update artist:.html.anchor'[url;artist]from data;                        / link to event
   markers:.data.markers data;                                                                   / get city markers
@@ -40,8 +40,9 @@
   .log.o"handling websocket event";
   neg[.z.w] -8!.j.j .ui.format[`processing;()];
   .log.o"processing request";
-  `io set .j.k -9!x;
-  res:.ui.evaluate .j.k -9!x;
+  input:enlist[`]!enlist(::);
+  `io set input,:@[.j.k -9!x;`h;:;.z.w];
+  res:.ui.evaluate input;
   .log.o"sending result to front end";
   neg[.z.w] -8!.j.j res;
  };
@@ -49,4 +50,7 @@
   .log.o"new connection made";
   neg[.z.w] -8!.j.j .ui.format[`init;()];
  };
-.z.wc:{.log.o"websocket closed"};
+.z.wc:{
+  .log.o"websocket closed deleting cached data";
+  delete from`.cache.attended where not h in key .z.W;
+ };
