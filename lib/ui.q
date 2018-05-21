@@ -55,3 +55,7 @@
   delete from`.cache.attended where not h in key .z.W;
   delete from`.cache.geocode where not h in key .z.W;
  };
+.z.po:{                                                                                         / deny local connections
+  .log.o("Blocking incoming request on handle {}";.z.w);
+  hclose .z.w;
+ }:
