@@ -32,16 +32,7 @@ function jsonTable(data){
 
 // Returns an object of all inputs used for the query
 function getInputs() {
-  var startdate     = $('#startdate input').val(),
-      enddate       = $('#enddate input').val(),
-      username      = $('#username input').val(),
-      athlete_Id    = $('#athleteId').val()
-
-  // Add values from grouping,region & custtype filter to their respective array
-  $('#summary .checklist input:checked').each(function(a,b){summary.push($(b).val());});
-  $('#following .checklist input:checked').each(function(a,b){following.push($(b).val());});
-  $('#include_clubs .checklist input:checked').each(function(a,b){include_clubs.push($(b).val());});
-  $('#include_map .checklist input:checked').each(function(a,b){include_map.push($(b).val());});
+  var username      = $('#username input').val()
 
   return {
     username: username,
@@ -122,7 +113,7 @@ function plotMarkers(bounds, markArray){
 
 
 // WEBSOCKETS CONNECTING TO KDB+
-var ws = new WebSocket("ws://localhost:5600");
+var ws = new WebSocket("ws://192.168.0.11:5600");
 ws.binaryType = 'arraybuffer'; // Required by c.js
 // WebSocket event handlers
 ws.onopen = function () {
