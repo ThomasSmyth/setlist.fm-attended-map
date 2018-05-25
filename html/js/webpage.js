@@ -45,6 +45,9 @@ var map=L.map('map');
 // create layer group for markers
 var marksLayerGroup = L.layerGroup();
 
+// cache username from requests
+var cacheUsername = '';
+
 // handle overlapping markers
 var oms = new OverlappingMarkerSpiderfier(map);
 
@@ -53,6 +56,12 @@ oms.addListener('click', function(marker) {
   popup.setContent(marker.desc);
   popup.setLatLng(marker.getLatLng());
   map.openPopup(popup);
+  // filter results by venue
+  request={
+    username: cacheUsername,
+    venue: marker.desc,
+  };
+  ws.send(ws.ser(request));
 });
 
 oms.addListener('unspiderfy', function(markers) {
@@ -148,6 +157,8 @@ ws.onmessage = function (event) {
         data  = edata.data,
         markers = edata.markers,
         bounds = edata.bounds;
+
+    cacheUsername = edata.username;
 
     // Enable submit button
     $('#submit').attr("disabled",false);

@@ -8,10 +8,13 @@
   data:.data.attended dict;                                                                     / get attended events and cache results for a connection handle
 //  `export set data;
   data:delete url from update artist:.html.anchor'[url;artist]from data;                        / link to event
-  markers:.data.markers[dict;data];                                                             / get city markers
+
+  ex:$[not`venue in key dict;`markers;count dict`venue;`venues;`markers];
+
+  exdata:.data[ex][dict;data];
 
   output,:.ui.format[`table;(`time`rows`data)!(`int$(.z.p-start)%1000000;count data;data)];     / Send formatted table
-  output,:markers;
+  output,:exdata;
   output[`username]:dict`username;
   `:npo set output;
   :output;

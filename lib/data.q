@@ -39,3 +39,8 @@
   m:value each .data.geocode.all[dict;vnl];                                                     / geocode venues
   :`markers`bounds!(m;(min;max)@\:m[;1 2]);
  };
+
+.data.venues:{[dict;data]
+  data:select from data where venue in enlist dict`venue;
+  .ui.format[`table;(`time`rows`data)!(`int$(.z.p-.z.p)%1000000;count data;data)]
+ };
