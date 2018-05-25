@@ -45,6 +45,20 @@ var map=L.map('map');
 // create layer group for markers
 var marksLayerGroup = L.layerGroup();
 
+// handle overlapping markers
+var oms = new OverlappingMarkerSpiderfier(map);
+
+var popup = new L.Popup({closeButton: false, offset: new L.Point(0.5, -4)});
+oms.addListener('click', function(marker) {
+  popup.setContent(marker.desc);
+  popup.setLatLng(marker.getLatLng());
+  map.openPopup(popup);
+});
+
+oms.addListener('unspiderfy', function(markers) {
+  map.closePopup();
+});
+
 // Display map div
 function showMap(){
   L.tileLayer('https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_all/{z}/{x}/{y}.png', {
@@ -72,9 +86,9 @@ function get_random_colour() {
   return colour;
 }
 
-function onClick(e) {
-  map.setView(e.latlng, z);
- }
+//function onClick(e) {
+//  map.setView(e.latlng, z);
+// }
 
 var customIconBlue = L.icon({
   iconUrl:'img/marker-15-blue.svg',
@@ -95,16 +109,17 @@ function plotMarkers(bounds, markArray){
 
   // loop over each marker and add to layer group
   markArray.forEach(function(mark){
-    marker = L.marker([mark[1],mark[2]],{icon:customIconBlue}).bindPopup(mark[0]);
-    marker.myCustomId = mark[0];
-    marker.on('click', onClick);
-    marker.on('mouseover', function (e) {
-      this.openPopup();
-    });
-    marker.on('mouseout', function (e) {
-      this.closePopup();
-    });
-    marksLayerGroup.addLayer(marker)
+    marker = L.marker([mark[1],mark[2]],{icon:customIconBlue});
+    marker.desc = mark[0];
+//    marker.on('click', onClick);
+//    marker.on('mouseover', function (e) {
+//      this.openPopup();
+//    });
+//    marker.on('mouseout', function (e) {
+//      this.closePopup();
+//    });
+    marksLayerGroup.addLayer(marker);
+    oms.addMarker(marker);
   });
 
   // add layer group to map
