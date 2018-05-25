@@ -51,9 +51,9 @@
   neg[.z.w] -8!.j.j .ui.format[`init;()];
  };
 .z.wc:{
-  .log.o"websocket closed deleting cached data";
-  delete from`.cache.attended where not h in key .z.W;
-  delete from`.cache.geocode where not h in key .z.W;
+  .log.o("websocket closed deleting cached data for handle {}";x);
+  delete from`.cache.attended where h=x;
+  delete from`.cache.geocode where h=x;
  };
 .z.po:{                                                                                         / deny local connections
   .log.o("Blocking incoming request on handle {}";.z.w);

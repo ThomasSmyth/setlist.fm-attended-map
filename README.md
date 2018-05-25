@@ -18,3 +18,10 @@ coordinates cannot be found then the city location will be used instead.
 To reduce the number of requests to both APIs caching is implemented on a per
 connection handle basis. Once a user disconnects any data they were viewing is
 released from memory. No on-disk caching is implemented.
+
+## Running
+
+Requires:
+
+* kdb+ v3.0+ (for websockets).
+* Valid setlist.fm API key.
