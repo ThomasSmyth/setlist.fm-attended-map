@@ -28,16 +28,16 @@
   ];
   ven:update q:", "sv/:flip(venue;city;state;country),limit:1 from vnl;                         / find venue coordinates, if they exists
   ven:ven,'.data.geocode.venue'[`q`limit#ven];
-  ven:0!(^/)`venue`city`country xkey/:`venue`city`country`lat`long#/:(vnl;ven);                 / join results, filling null venue coords with city values
-  ven:`venue`lat`long#ven;
+  ven:0!(^/)`venId`venue`city`country xkey/:`venId`venue`city`country`lat`long#/:(vnl;ven);     / join results, filling null venue coords with city values
+  ven:`venId`venue`lat`long#ven;
   `.cache.geocode upsert dict[`h`username],enlist ven;                                          / cache results
   :ven;
  };
 
 .data.markers:{[dict;data]                                                                      / [inputs;venue info]
-  vnl:distinct select city,venue,state,country,lat,long from data;                              / select city coordinates
+  vnl:distinct select city,venue,venId,state,country,lat,long from data;                        / select city coordinates
   m:value each .data.geocode.all[dict;vnl];                                                     / geocode venues
-  :`markers`bounds!(m;(min;max)@\:m[;1 2]);
+  :`markers`bounds!(m;(min;max)@\:m[;2 3]);
  };
 
 .data.venues:{[dict;data]

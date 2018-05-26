@@ -118,8 +118,8 @@ function plotMarkers(bounds, markArray){
 
   // loop over each marker and add to layer group
   markArray.forEach(function(mark){
-    marker = L.marker([mark[1],mark[2]],{icon:customIconBlue});
-    marker.desc = mark[0];
+    marker = L.marker([mark[2],mark[3]],{icon:customIconBlue});
+    marker.desc = mark[1];
 //    marker.on('click', onClick);
 //    marker.on('mouseover', function (e) {
 //      this.openPopup();
