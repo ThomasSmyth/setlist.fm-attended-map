@@ -59,7 +59,7 @@ oms.addListener('click', function(marker) {
   // filter results by venue
   request={
     username: cacheUsername,
-    venue: marker.desc,
+    venue: marker.uniqueID,
   };
   ws.send(ws.ser(request));
 });
@@ -120,6 +120,7 @@ function plotMarkers(bounds, markArray){
   markArray.forEach(function(mark){
     marker = L.marker([mark[2],mark[3]],{icon:customIconBlue});
     marker.desc = mark[1];
+    marker.uniqueID = mark[0];
 //    marker.on('click', onClick);
 //    marker.on('mouseover', function (e) {
 //      this.openPopup();

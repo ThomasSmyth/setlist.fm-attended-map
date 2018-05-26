@@ -41,6 +41,6 @@
  };
 
 .data.venues:{[dict;data]
-  data:select from data where venue in enlist dict`venue;
+  data:select from data where venId in enlist dict`venue;
   .ui.format[`table;(`time`rows`data)!(`int$(.z.p-.z.p)%1000000;count data;data)]
  };
