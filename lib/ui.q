@@ -15,9 +15,7 @@
 
   output,:.ui.format[`table;(`time`rows`data)!(`int$(.z.p-start)%1000000;count data;data)];     / Send formatted table
   output,:exdata;
-  output[`username]:dict`username;
-  `:npo set output;
-  :output;
+  :@[output;`username;:;dict`username];
  };
 
 .ui.format:{[name;data]                                                                         / [name;data] format dictionary to be encoded into json
@@ -26,7 +24,7 @@
 
 .ui.execdict:{[dict]                                                                            / [params] execute request based on passed dict of parameters
   if[not`username in key dict;
-    .log.e("Username not passed");
+    .log.e"Username not passed";
    ];
 
   .log.o"Executing query";                                                                      / execute query using parsed params

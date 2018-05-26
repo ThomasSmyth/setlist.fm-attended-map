@@ -3,7 +3,10 @@
 .http.key:@[{first read0 x};`:cfg/setlistfm.key;{-1 x;exit 0}];
 
 .http.root.setlistfm:"https://api.setlist.fm/rest/1.0/";
-.http.cmd.setlistfm:{.utl.sub("curl -sX GET --header 'Accept: application/json' --header 'x-api-key: {}' {}";(.http.key;x))};
+.http.cmd.setlistfm:{
+  cmd:"curl -sX GET --header 'Accept: application/json' --header 'x-api-key: {}' {}";
+  :.utl.sub(cmd;(.http.key;x));
+ };
 
 .http.req.setlistfm:{[url;params]
   :.j.k raze system .http.cmd.setlistfm .http.root.setlistfm,url,"?",.http.urlencode params;
@@ -41,12 +44,12 @@
   }[id]/[(();1;0b)]0;
  };
 
-.fmt.attended:{
-  artist:`date xcol enlist`eventDate`artist`url#@[x;`artist;@[;`name]];                         / get artist info
-  venue:`venue xcol enlist enlist[`name]#x`venue;                                               / get venue name
+.fmt.attended:{                                                                                 / [json] format event information
+  event:`id`date xcol enlist`id`eventDate`artist`url#@[x;`artist;@[;`name]];                    / get event info
+  venue:`venId`venue xcol enlist`id`name#x`venue;                                               / get venue info
   city:`city xcol enlist`name`state#x[`venue;`city];                                            / get city info
   coords:enlist x[`venue;`city;`coords];                                                        / get city coords
-  country:`country xcol enlist`code _ x[`venue;`city;`country];                                 / get country
-  r:(,'/)(artist;venue;city;coords;country);                                                    / join sub tables
+  country:`country xcol enlist`code _x[`venue;`city;`country];                                  / get country
+  r:(,'/)(event;venue;city;coords;country);                                                     / join sub tables
   :@[r;`date;"D"$];
  };
