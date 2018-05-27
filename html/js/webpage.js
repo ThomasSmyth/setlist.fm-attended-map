@@ -100,7 +100,7 @@ function get_random_colour() {
 // }
 
 var customIconBlue = L.icon({
-  iconUrl:'img/marker-15-blue.svg',
+  iconUrl:'img/marker-15-purple.svg',
   iconSize: [30,30]
 });
 
