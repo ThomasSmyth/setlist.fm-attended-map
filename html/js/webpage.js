@@ -32,7 +32,7 @@ function jsonTable(data){
 
 // Returns an object of all inputs used for the query
 function getInputs() {
-  var username      = $('#username input').val()
+  var username = $('#username input').val()
 
   return {
     username: username,

@@ -1,21 +1,35 @@
 // Webpage ui code
 // Required to work with json
 
+.ui.inputs:{[dict]
+  dict:.Q.def[`username`venue`h!(enlist"";enlist"";0Ni)]dict;
+  if[null dict`h;:.log.e"null handle provided"];
+  dict[`exdata]:$[count raze dict`venue;`venue;`markers];
+  :dict;
+ };
+
+.ui.outputs:{[dict;out]
+//  `export set data;
+  data:out[`data;`data];
+  if[`venue=dict`exdata;data:select from data where venId in enlist dict`venue];
+  data:delete id,url,lat,long,venId from update artist:.html.anchor'[url;artist]from data;
+  out[`data;`data]:data;
+  out[`username]:dict`username;
+  :.[out;`data`time;{`int$(.z.p-x)%1000000}];
+ };
+
 .ui.exectimeit:{[dict]                                                                          / [dict] execute function and time it
   output:()!();                                                                                 / blank output
   start:.z.p;                                                                                   / set start time
 
+  dict:.ui.inputs dict;                                                                         / parse inputs
+
   data:.data.attended dict;                                                                     / get attended events and cache results for a connection handle
-//  `export set data;
-  data:delete url from update artist:.html.anchor'[url;artist]from data;                        / link to event
 
-  ex:$[not`venue in key dict;`markers;count dict`venue;`venues;`markers];
+  if[`markers=dict`exdata;output,:.data.markers[dict;data]];                                    / append markers
 
-  exdata:.data[ex][dict;data];
-
-  output,:.ui.format[`table;(`time`rows`data)!(`int$(.z.p-start)%1000000;count data;data)];     / Send formatted table
-  output,:exdata;
-  :@[output;`username;:;dict`username];
+  output,:.ui.format[`table;(`time`rows`data)!(start;count data;data)];                         / Send formatted table
+  :.ui.outputs[dict;output];
  };
 
 .ui.format:{[name;data]                                                                         / [name;data] format dictionary to be encoded into json
@@ -41,8 +55,7 @@
   .log.o"handling websocket event";
   neg[.z.w] -8!.j.j .ui.format[`processing;()];
   .log.o"processing request";
-  input:enlist[`]!enlist(::);
-  `io set input,:@[.j.k -9!x;`h;:;.z.w];
+  `io set input:@[.j.k -9!x;`h;:;string .z.w];
   res:.ui.evaluate input;
   .log.o"sending result to front end";
   neg[.z.w] -8!.j.j res;
