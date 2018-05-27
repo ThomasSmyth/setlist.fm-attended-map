@@ -79,8 +79,8 @@ function showMap(){
   map.setView([0,0], 1);
 }
 
+// clear current markers
 function clearMap(){
-  // clear current markers
   map.removeLayer(marksLayerGroup);
   marksLayerGroup = L.layerGroup();
 }
@@ -95,18 +95,16 @@ function get_random_colour() {
   return colour;
 }
 
-//function onClick(e) {
-//  map.setView(e.latlng, z);
-// }
-
 var customIconBlue = L.icon({
   iconUrl:'img/marker-15-purple.svg',
-  iconSize: [30,30]
+  iconSize: [30,30],
+  iconAnchor: [13,27]
 });
 
 var customIconRed = L.icon({
   iconUrl:'img/marker-15-red.svg',
-  iconSize: [30,30]
+  iconSize: [30,30],
+  iconAnchor: [13,27]
 });
 
 function plotMarkers(bounds, markArray){
