@@ -1,4 +1,4 @@
-# Personal setlist.fm event mapper
+# setlist.fm user attended mapper
 
 Map attended sets for a user, currently supports mapping venues.
 
@@ -25,3 +25,10 @@ Requires:
 
 * kdb+ v3.0+ (for websockets).
 * Valid setlist.fm API key.
+
+To run:
+```
+q setlistfm.q
+```
+
+Opens webpages on `localhost:5600/setlistfm-mapper.html`
