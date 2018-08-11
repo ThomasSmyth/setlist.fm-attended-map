@@ -32,41 +32,57 @@ function jsonTable(data){
 
 // Returns an object of all inputs used for the query
 function getInputs() {
-  var startdate     = $('#startdate input').val(),
-      enddate       = $('#enddate input').val(),
-      username      = $('#username input').val(),
-      athlete_Id    = $('#athleteId').val()
-
-  // Add values from grouping,region & custtype filter to their respective array
-  $('#summary .checklist input:checked').each(function(a,b){summary.push($(b).val());});
-  $('#following .checklist input:checked').each(function(a,b){following.push($(b).val());});
-  $('#include_clubs .checklist input:checked').each(function(a,b){include_clubs.push($(b).val());});
-  $('#include_map .checklist input:checked').each(function(a,b){include_map.push($(b).val());});
+  var username = $('#username input').val()
 
   return {
     username: username,
   }
 }
 
-function showMap(){
-  window.map = L.map('map');
+// Create map
+var map=L.map('map');
 
-  L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
-  attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+// create layer group for markers
+var marksLayerGroup = L.layerGroup();
+
+// cache username from requests
+var cacheUsername = '';
+
+// handle overlapping markers
+var oms = new OverlappingMarkerSpiderfier(map);
+
+var popup = new L.Popup({closeButton: false, offset: new L.Point(0.5, -4)});
+oms.addListener('click', function(marker) {
+  popup.setContent(marker.desc);
+  popup.setLatLng(marker.getLatLng());
+  map.openPopup(popup);
+  // filter results by venue
+  request={
+    username: cacheUsername,
+    venue: marker.uniqueID,
+  };
+  ws.send(ws.ser(request));
+});
+
+oms.addListener('unspiderfy', function(markers) {
+  map.closePopup();
+});
+
+// Display map div
+function showMap(){
+  L.tileLayer('https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_all/{z}/{x}/{y}.png', {
+    attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OSM</a> &copy; <a href="http://cartodb.com/attributions">CartoDB</a>',
+    subdomains: 'abcd',
+    maxZoom: 19
   }).addTo(map);
 
-  map.setView([0, 0], 1);
+  map.setView([0,0], 1);
 }
 
-function clearMap() {
-  map.eachLayer(function (layer) {
-      map.removeLayer(layer);
-  });
-
-  L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
-  attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-  }).addTo(map);
-
+// clear current markers
+function clearMap(){
+  map.removeLayer(marksLayerGroup);
+  marksLayerGroup = L.layerGroup();
 }
 
 function get_random_colour() {
@@ -79,21 +95,41 @@ function get_random_colour() {
   return colour;
 }
 
+var customIconBlue = L.icon({
+  iconUrl:'img/marker-15-purple.svg',
+  iconSize: [30,30],
+  iconAnchor: [13,27]
+});
+
+var customIconRed = L.icon({
+  iconUrl:'img/marker-15-red.svg',
+  iconSize: [30,30],
+  iconAnchor: [13,27]
+});
+
 function plotMarkers(bounds, markArray){
-  map.flyToBounds(bounds, {padding:[50,50]})
+
   clearMap();
 
-  // loop over each marker and add to map
-  marksLayerGroup = L.layerGroup();
+  // set new bounds
+  map.flyToBounds(bounds,{padding:[50,50]})
 
+  // loop over each marker and add to layer group
   markArray.forEach(function(mark){
-    marker = new L.marker([mark[1],mark[2]]).bindPopup(mark[0]).addTo(map)
+    marker = L.marker([mark[2],mark[3]],{icon:customIconBlue});
+    marker.desc = mark[1];
+    marker.uniqueID = mark[0];
+    marksLayerGroup.addLayer(marker);
+    oms.addMarker(marker);
   });
+
+  // add layer group to map
+  marksLayerGroup.addTo(map);
 }
 
 
 // WEBSOCKETS CONNECTING TO KDB+
-var ws = new WebSocket("ws://localhost:5600");
+var ws = new WebSocket("ws://192.168.0.11:5600");
 ws.binaryType = 'arraybuffer'; // Required by c.js
 // WebSocket event handlers
 ws.onopen = function () {
@@ -105,6 +141,7 @@ ws.onclose = function () {
   // Disable export button
 //  $('#export').addClass("disabled");
 };
+
 ws.onmessage = function (event) {
   if(event.data){
     var edata = JSON.parse(deserialize(event.data)),
@@ -112,6 +149,8 @@ ws.onmessage = function (event) {
         data  = edata.data,
         markers = edata.markers,
         bounds = edata.bounds;
+
+    cacheUsername = edata.username;
 
     // Enable submit button
     $('#submit').attr("disabled",false);
@@ -166,6 +205,10 @@ ws.error = function (error) {
   $('#error-modal').modal();
 }
 
+ws.ser = function (input) {
+  return serialize(JSON.stringify(input));
+}
+
 // jQuery used for UI
 $(function() {
   // When submit button is clicked, disabled buttons and send data over WebSocket
@@ -173,9 +216,11 @@ $(function() {
     // Disable submit button on submit
     $(this).attr("disabled",true);
     $('#processing').show();
+    // clear markers from map
+    clearMap();
     // Disable export on submit
 //    $('#export').addClass("disabled");
     // Send to kdb+ over websockets
-    ws.send(serialize(JSON.stringify(getInputs())));
+    ws.send(ws.ser(getInputs()));
   });
 });
