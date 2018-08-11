@@ -119,13 +119,6 @@ function plotMarkers(bounds, markArray){
     marker = L.marker([mark[2],mark[3]],{icon:customIconBlue});
     marker.desc = mark[1];
     marker.uniqueID = mark[0];
-//    marker.on('click', onClick);
-//    marker.on('mouseover', function (e) {
-//      this.openPopup();
-//    });
-//    marker.on('mouseout', function (e) {
-//      this.closePopup();
-//    });
     marksLayerGroup.addLayer(marker);
     oms.addMarker(marker);
   });
