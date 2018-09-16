@@ -50,6 +50,5 @@
   city:`city xcol enlist`name`state#x[`venue;`city];                                            / get city info
   coords:enlist x[`venue;`city;`coords];                                                        / get city coords
   country:`country xcol enlist`code _x[`venue;`city;`country];                                  / get country
-  r:(,'/)(event;venue;city;coords;country);                                                     / join sub tables
-  :@[r;`date;"D"$];
+  :@[;`date;"D"$](,'/)(event;venue;city;coords;country);                                        / join sub tables
  };
