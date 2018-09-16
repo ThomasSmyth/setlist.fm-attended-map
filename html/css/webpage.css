@@ -30,33 +30,11 @@ label{
 input[type="checkbox"]{
   margin-right:10px;
 }
-/* Table and database stats */
-.stats{
-  color: #AAA;
-  display: none;
-  margin-bottom: 0;
-}
-.stats li{
-  list-style-type: none;
-  display: inline;
-  padding-left: 15px;
-}
-.stats li:first-child{
-  padding-left: 0;
-}
 /* Table */
 #tableoutput {
   height: 400px;
   width:992px;
   margin-bottom:40px;
-  overflow: auto;
-}
-
-/* Club checkboxes */
-#clubs-filter {
-  background-color: yellow;
-  width: 250px;
-  height: 300px;
   overflow: auto;
 }
 
@@ -71,3 +49,7 @@ input[type="checkbox"]{
   margin-bottom:40px;
 }
 
+/* FAQ page */
+.answer {
+  margin-bottom: 30px;
+}
