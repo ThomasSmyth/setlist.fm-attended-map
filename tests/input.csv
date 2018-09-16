@@ -1,3 +1,5 @@
 action,ms,bytes,lang,code,repeat,minver,comment
 before,0,0,q,.test.fixture.bin[`catt;`.cache.attended],1,,
+before,0,0,q,.test.fixture.bin[`inputs;`dict],1,,
+true,0,0,q,99h=type dict,1,,
 true,0,0,q,99h=type .cache.attended,1,,

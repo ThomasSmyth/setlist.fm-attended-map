@@ -2,12 +2,10 @@
 export SFMROOTDIR=${PWD}
 export SFMTESTDIR=${PWD}/tests
 
+arg=""
+
 if [ "$1" = "-debug" ]; then
-  cmd="rlwrap -c -r q"
   arg="-debug"
-else
-  cmd="q"
-  arg=""
 fi
 
-$cmd $SFMTESTDIR/runTests.q $arg
+rlwrap -c -r q $SFMTESTDIR/runTests.q $arg

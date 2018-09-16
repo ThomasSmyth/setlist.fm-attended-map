@@ -3,21 +3,47 @@
 \l tests/k4unit.q
 
 .test.dir:hsym`$getenv`SFMTESTDIR;
-.test.fixtures:` sv .test.dir,`fixtures;
-.test.orderFile:`:tests/order.txt;
-.test.order:();
+.test.orderFile:`:tests/order.csv;
 
-.test.fixture.bin:{[d;f;n]n set get .utl.p.symbol d,f}.test.fixtures;
+/ fixtures
+.test.fixture.dir:` sv .test.dir,`fixtures;
+.test.fixture.vars:();
 
+.test.fixture.bin:{[d;f;n]
+  if[n in .test.fixture.vars;
+    .log.e[`test]("var exists: {}";n);
+    '.utl.sub("var exists: {}";n);
+   ];
+  p:.utl.p.symbol d,f;
+  if[()~key p:.utl.p.symbol d,f;
+    .log.e[`test]("file does not exist: {}";p);
+    '.utl.sub("file does not exist: {}";p);
+   ];
+  n set get p;
+  .test.fixture.vars,:n;                                                                        / add variable to list
+ }.test.fixture.dir;
+
+.test.fixture.clear:{                                                                           / remove added fixtures
+  {
+    :![;();0b;].$[3=count l:` vs x;(` sv l 0 1;enlist l 2);(`.;enlist x)];                      / ensure fixtures are removed from namespaces
+  }'[.test.fixture.vars];
+  .test.fixture.vars:();                                                                        / clear fixture list
+ };
+
+/ tests
 .test.loadOrder:{
-  r:@[read0;.test.orderFile;{.log.e[`test]"order.txt not found, exiting...";exit 1}];
-  .test.order:` sv'`:tests,'`$r;
+  if[()~key .test.orderFile;
+    .log.e[`test]"order.txt not found, exiting...";
+    exit 1;
+   ];
+  t:@[;`file;{` sv'.test.dir,'x}]("SB";1#",")0:.test.orderFile;
   .log.o[`test]"successfully loaded order.txt";
+  :t;
  };
 
 .test.run:{
-  .test.loadOrder[];
-  KUltf each .test.order;
+  t:.test.loadOrder[];
+  KUltf each exec file from t;
   KUrt[];
   if[c:count t:select from KUTR where not ok;
     .log.e[`test]("{} tests failed";c);
@@ -28,4 +54,6 @@
 
 .test.run[];
 
-if[not(count select from KUTR where not ok)&`debug in key .Q.opt .z.x;exit 0];
+if[not(count select from KUTR where not ok)&`debug in key .Q.opt .z.x;
+  exit 0;
+ ];

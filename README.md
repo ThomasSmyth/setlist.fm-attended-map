@@ -35,12 +35,15 @@ Opens webpages on `localhost:5600/setlistfm-mapper.html`
 
 ## Tests
 
-To test:
+Testing is handled by `tests/k4unit.q`, which loads the test csvs specified in
+`tests/order.csv`. This should include the relative path to the test csv within
+the `tests` directory. To run the offline tests use:
 ```
 sh runTests.sh
 ```
 
-Can run with debug flag to investigate errors:
+To investigate errors when running the tests the `-debug` flag can be specified
+to ensure the process does not exit after encountering a failure.
 ```
 sh runTests.sh -debug
 ```
