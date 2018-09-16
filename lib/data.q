@@ -1,6 +1,6 @@
 / data processing
 
-.cache.attended:([h:();username:()]data:());
+.cache.attended:([h:();username:()]data:());                                                    / blank schema
 .cache.geocode:([h:();username:()]data:());
 
 .data.attended:{[dict]                                                                          / [params] get attended events for a user, checking for cached events;
@@ -37,5 +37,5 @@
 .data.markers:{[dict;data]                                                                      / [inputs;venue info]
   vnl:distinct select city,venue,venId,state,country,lat,long from data;                        / select city coordinates
   m:value each .data.geocode.all[dict;vnl];                                                     / geocode venues
-  :`markers`bounds!(m;(min;max)@\:m[;2 3]);
+  :`markers`bounds!(m;(min;max)[;m[;2 3]]);
  };
