@@ -1,5 +1,7 @@
 action,ms,bytes,lang,code,repeat,minver,comment
 before,0,0,q,.test.fixture.bin[`catt;`.cache.attended],1,,
 before,0,0,q,.test.fixture.bin[`inputs;`dict],1,,
+comment,0,0,q,,1,,add test to compare "".data.attended dict"" to a fixture
+comment,0,0,q,,1,,add test to compare markers to a fixture
 true,0,0,q,99h=type dict,1,,
 true,0,0,q,99h=type .cache.attended,1,,
