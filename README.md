@@ -37,7 +37,7 @@ Opens webpages on `localhost:5600/setlistfm-mapper.html`
 
 Testing is handled by `tests/k4unit.q`, which loads the test csvs specified in
 `tests/order.csv`. This should include the relative path to the test csv within
-the `tests` directory. To run the offline tests use:
+the `tests/instructions` directory. To run the offline tests use:
 ```
 sh runTests.sh
 ```

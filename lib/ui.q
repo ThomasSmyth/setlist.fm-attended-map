@@ -22,8 +22,6 @@
   output:()!();                                                                                 / blank output
   start:.z.p;                                                                                   / set start time
 
-  `aa set dict;
-
   dict:.ui.inputs dict;                                                                         / parse inputs
 
   data:.data.attended dict;                                                                     / get attended events and cache results for a connection handle
