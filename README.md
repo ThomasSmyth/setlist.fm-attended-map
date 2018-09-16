@@ -28,7 +28,19 @@ Requires:
 
 To run:
 ```
-q setlistfm.q
+q setlistfm.q -run
 ```
 
 Opens webpages on `localhost:5600/setlistfm-mapper.html`
+
+## Tests
+
+To test:
+```
+sh runTests.sh
+```
+
+Can run with debug flag to investigate errors:
+```
+sh runTests.sh -debug
+```
