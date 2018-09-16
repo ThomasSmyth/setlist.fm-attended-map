@@ -9,5 +9,6 @@
 \l lib/ui.q
 
 if[`run in key .Q.opt .z.x;
+  .log.o[`run]("-run specified, setting port to {}";.var.port);
   system .utl.sub("p {}";.var.port)
  ];
