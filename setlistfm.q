@@ -6,7 +6,9 @@
 
 .load.dir.q'[`:lib`:cfg];                                                                       / load libraries and configs
 
-if[`run in key .Q.opt .z.x;
-  .log.o[`run]("-run specified, setting port to {}";.cfg.port);
+.utl.args[];                                                                                    / parse command line
+
+if[.cfg.run;
+  .log.o[`run](".cfg.run is true, setting port to {}";.cfg.port);
   system .utl.sub("p {}";.cfg.port);
  ];

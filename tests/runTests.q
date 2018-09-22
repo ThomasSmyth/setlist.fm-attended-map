@@ -45,15 +45,14 @@
   t:.test.loadOrder[];                                                                          / get order table
   KUltf each exec file from t;                                                                  / add each instruction set
   KUrt[];                                                                                       / run tests
-  if[c:count t:select from KUTR where not ok;                                                   / return any failed tests
+  if[c:0<count t:select from KUTR where not ok;                                                 / return any failed tests
     .log.e[`test]("{} tests failed";c);
-    :show t;
+    show t;
    ];
-  .log.o[`test]"Tests successfully passed";
+   if[not c;
+    .log.o[`test]"Tests successfully passed";
+   ];
+  .utl.exit[`test]0<c;                                        / exit with appropriate status code
  };
 
-.test.run[];
-
-if[not(count select from KUTR where not ok)&`debug in key .Q.opt .z.x;                          / do not exit if an error occurs in debug mode
-  .utl.exit[`test;0];
- ];
+.test.run[];                                                                                    / run tests
