@@ -34,7 +34,7 @@
 .test.loadOrder:{
   if[()~key .test.orderFile;                                                                    / ensure order file exists
     .log.e[`test]"order.txt not found, exiting...";
-    exit 1;
+    .utl.exit[`test;1];
    ];
   t:@[;`file;{` sv'.test.instructions,'x}]("SB";1#",")0:.test.orderFile;                        / parse order file
   .log.o[`test]"successfully loaded order.txt";
@@ -55,5 +55,5 @@
 .test.run[];
 
 if[not(count select from KUTR where not ok)&`debug in key .Q.opt .z.x;                          / do not exit if an error occurs in debug mode
-  exit 0;
+  .utl.exit[`test;0];
  ];

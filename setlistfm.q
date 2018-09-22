@@ -1,15 +1,12 @@
 / setlist fm mapping backend
 
-\l cfg/settings.q
-\l lib/utl.q
-\l lib/log.q
-\l lib/load.q
-\l lib/http.q
-\l lib/data.q
-\l lib/html.q
-\l lib/ui.q
+\l qlib/lib/utl.q
+\l qlib/lib/log.q
+\l qlib/lib/load.q
+
+.load.dir.q'[`:lib`:cfg];                                                                       / load libraries and configs
 
 if[`run in key .Q.opt .z.x;
-  .log.o[`run]("-run specified, setting port to {}";.var.port);
-  system .utl.sub("p {}";.var.port);
+  .log.o[`run]("-run specified, setting port to {}";.cfg.port);
+  system .utl.sub("p {}";.cfg.port);
  ];
