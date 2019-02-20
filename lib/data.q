@@ -14,9 +14,9 @@
   :res;
  };
 
-.data.geocode.venue:{[params]
+.data.geocode.venue:{[params]                                                                   / [params] return coordinates for a venue
   .log.o[`data]("Geocoding: {}";params`q);
-  res:.http.req.nominatim params;
+  res:.http.req.nominatim params;                                                               / request coords from nominatim
   if[0h=type res;:`lat`long!0n 0n];
   :`lat`long!raze"F"$res`lat`lon;
  };
