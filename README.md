@@ -28,7 +28,7 @@ Requires:
 
 To run:
 ```
-q setlistfm.q
+q setlistfm.q -run
 ```
 
 Opens webpages on `localhost:5600/setlistfm-mapper.html`

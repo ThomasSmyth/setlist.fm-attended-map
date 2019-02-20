@@ -28,16 +28,16 @@
  };
 
 .http.attended:{[id]                                                                            / [id] get attended events for a user
-  .log.o("Requesting events for {}";id);
+  .log.o[`http]("Requesting events for {}";id);
   :{[id;p]                                                                                      / [id;(results;page number;complete)] return all attended events for a user
     if[p 2;                                                                                     / exit if all results have been obtained
-      .log.o("Found all events for {}";id);
+      .log.o[`http]("Found all events for {}";id);
       :p;
     ];
     c:count p 0;                                                                                / get current number of events
-    .log.o("Requesting event page {} for {}";(p 1;id));
+    .log.o[`http]("Requesting event page {} for {}";(p 1;id));
     res:.http.req.setlistfm[.utl.sub("user/{}/attended";id);enlist[`p]!enlist p 1];             / request attended events
-    if[404f=first res`code;.log.e("User not found: {}";id)];
+    if[404f=first res`code;.log.e[`http]("User not found: {}";id)];
     p[0],:raze .fmt.attended'[res`setlist];                                                     / format json into table
     p[2]:(count[p 0]>="j"$res`total)or c=count p 0;                                             / determine if all results have been retrieved or requests have been exhausted
     :@[p;1;+;not p 2];                                                                          / increment page number if more data needs retrieved
@@ -50,6 +50,5 @@
   city:`city xcol enlist`name`state#x[`venue;`city];                                            / get city info
   coords:enlist x[`venue;`city;`coords];                                                        / get city coords
   country:`country xcol enlist`code _x[`venue;`city;`country];                                  / get country
-  r:(,'/)(event;venue;city;coords;country);                                                     / join sub tables
-  :@[r;`date;"D"$];
+  :@[;`date;"D"$](,'/)(event;venue;city;coords;country);                                        / join sub tables
  };

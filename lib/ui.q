@@ -3,7 +3,7 @@
 
 .ui.inputs:{[dict]
   dict:.Q.def[`username`venue`h!(enlist"";enlist"";0Ni)]dict;
-  if[null dict`h;:.log.e"null handle provided"];
+  if[null dict`h;:.log.e[`ui]"null handle provided"];
   dict[`exdata]:$[count raze dict`venue;`venue;`markers];
   :dict;
  };
@@ -38,13 +38,13 @@
 
 .ui.execdict:{[dict]                                                                            / [params] execute request based on passed dict of parameters
   if[not`username in key dict;
-    .log.e"Username not passed";
+    .log.e[`ui]"Username not passed";
    ];
 
-  .log.o"Executing query";                                                                      / execute query using parsed params
-  data:@[.ui.exectimeit;dict;{.log.e("Didn't execute due to {}";x)}];
+  .log.o[`ui]"Executing query";
+  data:@[.ui.exectimeit;dict;{.log.e[`ui]("Didn't execute due to {}";x)}];                      / execute query using parsed params
 
-  .log.o("Returning {} results";count data[`data;`data]);
+  .log.o[`ui]("Returning {} results";count data[`data;`data]);
   :data;
   };
 
@@ -52,24 +52,24 @@
 
 / web socket handlers
 .z.ws:{                                                                                         / websocket handler
-  .log.o"handling websocket event";
+  .log.o[`ui]"handling websocket event";
   neg[.z.w] -8!.j.j .ui.format[`processing;()];
-  .log.o"processing request";
+  .log.o[`ui]"processing request";
   `io set input:@[.j.k -9!x;`h;:;string .z.w];
   res:.ui.evaluate input;
-  .log.o"sending result to front end";
+  .log.o[`ui]"sending result to front end";
   neg[.z.w] -8!.j.j res;
  };
 .z.wo:{
-  .log.o"new connection made";
+  .log.o[`ui]"new connection made";
   neg[.z.w] -8!.j.j .ui.format[`init;()];
  };
 .z.wc:{
-  .log.o("websocket closed deleting cached data for handle {}";x);
+  .log.o[`ui]("websocket closed deleting cached data for handle {}";x);
   delete from`.cache.attended where h=x;
   delete from`.cache.geocode where h=x;
  };
 .z.po:{                                                                                         / deny local connections
-  .log.o("Blocking incoming request on handle {}";.z.w);
+  .log.o[`ui]("Blocking incoming request on handle {}";.z.w);
   hclose .z.w;
  }:
